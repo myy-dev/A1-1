@@ -1,0 +1,2 @@
+Microsoft AdventureWorks OLTP sample database. Online orders only. line_amount = LineTotal (after discount, before tax and freight). Images shared across product variants.
+https://github.com/microsoft/sql-server-samples/releases/tag/adventureworks
