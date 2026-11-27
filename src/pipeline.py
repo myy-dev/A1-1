@@ -14,6 +14,14 @@ class DataAnalyzer:
         self.data_path = Path(data_path)
         self.df = None
 
+    def _require(self, columns, step):
+        """선행 단계 누락 시 원인을 알려 주는 오류"""
+        if self.df is None:
+            raise RuntimeError("load_data()를 먼저 호출해야 합니다.")
+        missing = [column for column in columns if column not in self.df.columns]
+        if missing:
+            raise RuntimeError(f"{step}를 먼저 호출해야 합니다. 없는 열: {', '.join(missing)}")
+
     def load_data(self):
         """거래 CSV 로드와 식별자·거래일 자료형 설정"""
         self.df = pd.read_csv(
@@ -25,6 +33,7 @@ class DataAnalyzer:
 
     def add_features(self):
         """상품명 길이와 전체 RGB 값 기반 사진별 통계·히스토그램 비율"""
+        self._require(["product_name", "image_path"], "load_data()")
         df = self.df
         df["name_length"] = df["product_name"].str.len()
         paths = df["image_path"].dropna().unique()
@@ -56,6 +65,7 @@ class DataAnalyzer:
         """고유 사진의 그룹별 통계로 분석용 이미지 피처 대치"""
         if strategy not in {"median", "mean"}:
             raise ValueError("strategy는 median 또는 mean이어야 합니다.")
+        self._require([group_col, "image_path", "pixel_mean", "pixel_std"], "add_features()")
         df = self.df
         observed = df.dropna(subset=["image_path"]).drop_duplicates([group_col, "image_path"])
         columns = ["pixel_mean", "pixel_std"]
@@ -82,6 +92,7 @@ class DataAnalyzer:
 
     def calculate_rfm(self, reference_date=None):
         """고객별 최근성·빈도·구매액 점수와 상호 배타적 고객군"""
+        self._require(["customer_id", "order_id", "order_date", "line_amount"], "load_data()")
         df = self.df
         last_date = df["order_date"].max()
         reference = last_date if reference_date is None else pd.Timestamp(reference_date)
@@ -106,6 +117,7 @@ class DataAnalyzer:
 
     def purchase_cohorts(self):
         """첫 관측 구매월별 경과월 고유 구매자 수와 재구매율"""
+        self._require(["customer_id", "order_date"], "load_data()")
         purchases = self.df[["customer_id", "order_date"]].copy()
         purchases["month"] = purchases.pop("order_date").dt.to_period("M")
         purchases = purchases.drop_duplicates()
