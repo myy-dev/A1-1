@@ -7,11 +7,13 @@
 ```sh
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install numpy pandas matplotlib seaborn plotly jupyterlab ipykernel
+python -m pip install -r requirements.txt
 python -m jupyterlab notebooks/analysis_report.ipynb
 ```
 
-노트북에서 방금 만든 환경의 Python 커널을 선택하고 **Restart Kernel and Run All Cells**를 실행한다. 위에서부터 데이터 탐색, 이미지 피처·결측 대치, 고객 집계와 이상치, 시각화, 세그먼트 분석, 첫 구매월별 재구매율 순서로 결과를 확인한다. Plotly는 보너스 차트에만 사용한다. 9절 실행 후 프로젝트의 `docs/segments.html` 파일을 더블클릭하면 기본 브라우저에서 고객군별 점을 살펴볼 수 있다. [인터랙티브 고객군 차트](segments.html)
+`requirements.txt`의 버전은 Python 3.14.5에서 노트북 전체를 다시 실행해 확인한 조합이다. pandas 3은 Python 3.11 이상이 필요하다.
+
+노트북에서 방금 만든 환경의 Python 커널을 선택하고 **Restart Kernel and Run All Cells**를 실행한다. 위에서부터 데이터 탐색, 이미지 피처·결측 대치, 고객 집계와 이상치, 시각화, 세그먼트 분석, 첫 구매월별 재구매율 순서로 결과를 확인한다. Plotly는 보너스 차트에만 사용한다. 9절 실행 후 프로젝트의 `docs/segments.html` 파일을 더블클릭하면 기본 브라우저에서 고객 한 명당 점 하나로 표시된 고객군 분포를 살펴볼 수 있다. 차트 라이브러리는 CDN에서 불러오므로 인터넷 연결이 필요하다. [인터랙티브 고객군 차트](segments.html)
 
 ## 파이프라인 사용
 

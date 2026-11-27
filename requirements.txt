@@ -1,0 +1,8 @@
+# Python 3.11 이상 (pandas 3 요구 사항). Python 3.14.5에서 검증
+numpy==2.5.5
+pandas==3.1.1
+matplotlib==3.11.2
+seaborn==0.13.2
+plotly==7.2.0
+jupyterlab==4.6.6
+ipykernel==7.4.0
